@@ -1,0 +1,120 @@
+@import "less/mixins.less";
+
+@pink: #be1a8d;
+
+.custom-highlight{
+    background: @pink;
+    color: #fff;
+    text-shadow: -1px 1px 1px darken(@pink, 15%);
+}
+
+/* Apply custom highlight */
+::-moz-selection{ .custom-highlight; }
+::selection { .custom-highlight; }
+
+body {
+    width: 800px;
+}
+
+// #name {
+//     width: 400px;
+//     margin-right: 170px;
+//     margin-top:20px;
+//     padding-left: 10px;
+   
+// }
+
+// #time {
+//     width: 300px;
+//     margin-right: 270px;
+//     padding: 20px 20px 0px 40px;
+// }
+
+// #info {
+//     width: 300px;
+//     margin-right: 270px;
+//     padding: 20px 20px 100px 40px;
+// }
+
+
+// .coloured {
+//     background-color: #83ebfa;
+//     border:2px solid black;
+//     padding:5px;
+//     float: right;
+//     font-family: sans-serif;
+//     font-size: 18px;
+// }
+
+body {
+    width:100%;
+}
+
+
+.head {
+  position: relative;
+  background-color: #adffff;
+  height:100px
+}
+
+
+.cont {
+  margin: 5px auto;
+  width: 800px;
+  background-color:lightCyan;
+}
+
+.content {
+  clear: left;
+  width: 320px;
+  margin: auto;
+  padding-left: 20px;
+  background-color: lightSkyBlue;
+}
+
+img {
+  vertical-align: top;
+  position: relative;
+  top: 20px;
+  left: 20px;
+}
+
+.profile_name {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 0;
+  position: relative;
+  left: 20px;
+  top: 20px;
+  width: 500px;
+  background-color: lightSkyBlue;
+  border: 1px solid black;
+}
+
+td {
+    padding-left: 10px;
+    padding-top:10px;
+}
+
+.profile_name h1{
+  padding-left: 30px;
+}
+
+.p_datebox {
+  margin-top: 20px;
+  border: 1px solid black;
+//   background-color:lightCyan;
+}
+
+.p_content {
+  border: 1px solid black;
+//   background-color:lightCyan;
+}
+
+.prof {
+  background-color:#adffff;
+  width: 550px;
+  height: 650px;
+  margin: 20px auto;
+  padding: 15px;
+}

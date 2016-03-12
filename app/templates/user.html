@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+
+{% block js %}
+{% endblock %}
+
+
+{% block main %}
+  <div class="body">
+  <div class="cont">
+  <div class="head">
+    <img src="{{ user['image'] }}" height="200" width="200">
+    <div class="profile_name">
+      <h1>{{user['fname']}} {{user['lname']}}</h1>
+    </div>
+  </div>
+  <div class="p_datebox content">
+    <p>Profile added on: {{ datestr }}</p>
+  </div><br>
+  <div class="p_content content">
+    <p>
+      Username: {{user['uname']}}<br />
+      ID: {{user['userid']}}<br />
+      Sex: {{user['sex']}}<br />
+      Age: {{user['age']}}<br />
+      Highest Score: {{user['highscore']}}<br />
+      TDollars: {{user['tdollars']}}<br />
+    </p>
+    </div>
+    </div>
+  </div>
+{% endblock %}

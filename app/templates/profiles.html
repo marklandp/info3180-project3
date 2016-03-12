@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block js %}
+{% endblock %}
+
+
+{% block main %}
+<div class="prof">
+  <h1>All Profiles:</h1>
+  <hr>
+  <table>
+    <tr>
+      <th>User ID</th><th>Username</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.userid }}</td><td><a href="/profile/{{ user.id }}">{{ user.username}}</a></td>
+    </tr>
+  {% endfor %}
+  </table>
+</div>
+{% endblock %}
