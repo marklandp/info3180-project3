@@ -7,12 +7,14 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from app import db
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
 from app.models import User_info
 from flask import jsonify, session
 from datetime import *
-from .forms import NewProfileForm
+from .forms import RegistrationForm
 import json
 from flask import Response
 from werkzeug.utils import secure_filename
@@ -40,18 +42,17 @@ def about():
 def timeinfo():
     return datetime.now()
     
-@app.route('/profile/', methods=['POST', 'GET'])
-def profile():
+@app.route('/register/', methods=['POST', 'GET'])
+def register():
   """Render the profile page"""
-  form = NewProfileForm()
+  form = RegistrationForm()
   if form.validate_on_submit():
     username = request.form['username']
-    fname = request.form['fname']
-    lname = request.form['lname']
+    email = request.form['email']
+    password = request.form['password']
     age = int(request.form['age'])
     sex = request.form['sex']
     photo = request.files['image']
-    # return "works here"
     imagename = username + '_' + secure_filename(photo.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], imagename)
     photo.save(file_path)
@@ -64,7 +65,7 @@ def profile():
           userid = int(old) + 1
       else:
         userid = base_id
-    newUser = User_info(username, userid, imagename, fname, lname, age, sex, timeinfo())
+    newUser = User_info(username, userid, imagename, email, password, age, sex, timeinfo())
     db.session.add(newUser)
     db.session.commit()
     nu = User_info.query.filter_by(username=username).first()
@@ -90,9 +91,9 @@ def user_profile(userid):
   if usr is not None:
     imgURL = url_for('static', filename='img/'+usr.image)
     if request.method == 'POST':
-      return jsonify(userid=usr.userid, uname=usr.username, image=imgURL, sex=usr.sex, age=usr.age, profile_added_on=usr.datejoined, highscore=usr.highscore, tdollars=usr.tdollars)
+      return jsonify(userid=usr.userid, uname=usr.username, image=imgURL, sex=usr.sex, age=usr.age, profile_added_on=usr.datejoined)
     else:
-      user = {'id':usr.id, 'userid':usr.userid, 'uname':usr.username, 'image':imgURL, 'age':usr.age, 'fname':usr.fname, 'lname':usr.lname, 'sex':usr.sex, 'highscore':usr.highscore, 'tdollars':usr.tdollars}
+      user = {'id':usr.id, 'userid':usr.userid, 'uname':usr.username, 'image':imgURL, 'age':usr.age, 'email':usr.email, 'sex':usr.sex}
       return render_template('user.html', user=user, datestr=date_to_str(usr.datejoined))
   else:
     return render_template('404.html')

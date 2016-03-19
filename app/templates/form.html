@@ -7,19 +7,60 @@
 
 {% block main %}
 <div class="prof">
-  <h1>Create User Profile</h1>
+  <h1>Register Here</h1>
   <p>Enter details below:</p>
   <hr />
   <table>
-  <form action="{{ url_for('profile') }}" method="post" enctype="multipart/form-data">
+  <form action="{{ url_for('register') }}" method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    <tr><td>Username:</td> <td>{{ form.username }}</td></tr>
-    <tr><td>First Name:</td><td> {{ form.fname }}</td></tr>
-    <tr><td>Last Name: </td><td>{{ form.lname }}</td></tr>
-    <tr><td>Age:</td><td> {{ form.age }}</td></tr>
-    <tr><td>Sex: </td><td>{{ form.sex }}</td></tr>
-    <tr><td>Profile Photo:</td><td> {{ form.image }}</td></tr>
-    <tr><td colspan="2"><input type="submit" /></td></tr>
+    <tr><td>Username:</td> <td>{{ form.username }}</td>
+    <td><div class="flash">
+        {% for message in form.username.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td>Email:</td><td> {{ form.email }}</td>
+    <td>{% for message in form.email.errors %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+    </td></tr>
+    <tr><td>Email:</td><td> {{ form.confirme(placeholder="Confirm Email") }}</td>
+    <td><div class="flash">
+        {% for message in form.confirme.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td>Password: </td><td>{{ form.password }}</td>
+    <td><div class="flash">
+        {% for message in form.password.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td>Password: </td><td>{{ form.confirmp(placeholder="Confirm Password") }}</td>
+    <td><div class="flash">
+        {% for message in form.confirmp.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td>Age:</td><td> {{ form.age }}</td>
+    <td><div class="flash">
+        {% for message in form.age.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td>Sex: </td><td>{{ form.sex }}</td>
+    <td><div class="flash">
+        {% for message in form.sex.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td>Profile Photo:</td><td> {{ form.image }}</td>
+    <td><div class="flash">
+        {% for message in form.image.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td colspan="3"><input type="submit" value="Register"/></td></tr>
   </form>
   </table>
 </div>
