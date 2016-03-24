@@ -11,7 +11,7 @@
   <div class="head">
     <img src="{{ user['image'] }}" height="200" width="200">
     <div class="profile_name">
-      <h1>{{  user['uname'] }}</h1>
+      <h1>{{user['fname']}}  {{user['lname']}}</h1>
     </div>
   </div>
   <div class="p_datebox content">
@@ -19,12 +19,13 @@
   </div><br>
   <div class="p_content content">
     <p>
-      ID: {{user['userid']}}<br />
-      Username: {{user['uname']}}<br />
       Email: {{user['email']}}<br />
       Sex: {{user['sex']}}<br />
       Age: {{user['age']}}<br />
     </p>
+    <form action="{{ url_for('signout') }}" method="post">
+    <input type=submit value="Sign Out">
+    </form>
     </div>
     </div>
   </div>

@@ -7,16 +7,14 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for, flash
+from flask import Flask, Response, render_template, request, redirect, url_for, flash, jsonify, session, abort, g
+from flask.ext.login import  LoginManager, login_user , logout_user , current_user , login_required
 from app import db
-from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from app.models import User_info
-from flask import jsonify, session
 from datetime import *
-from .forms import RegistrationForm
+from .forms import RegistrationForm, SigninForm
 import json
-from flask import Response
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql.expression import func
 import os
@@ -26,6 +24,14 @@ import time
 ###
 # Routing for your application.
 ###
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'signin'
+
+@login_manager.user_loader
+def load_user(id):
+    return User_info.query.get(int(id))
 
 @app.route('/')
 def home():
@@ -46,31 +52,54 @@ def timeinfo():
 def register():
   """Render the profile page"""
   form = RegistrationForm()
+    
   if form.validate_on_submit():
-    username = request.form['username']
+    fname = request.form['fname']
+    lname = request.form['lname']
     email = request.form['email']
     password = request.form['password']
     age = int(request.form['age'])
     sex = request.form['sex']
     photo = request.files['image']
-    imagename = username + '_' + secure_filename(photo.filename)
+    imagename = fname + '_' + secure_filename(photo.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], imagename)
     photo.save(file_path)
-    get_id = db.session.execute('select max(userid) from User_info')
-    base_id = 6200000
-    for ids in get_id:
-      old = ids[0]
-      if old is not None:
-        if old >= base_id:
-          userid = int(old) + 1
-      else:
-        userid = base_id
-    newUser = User_info(username, userid, imagename, email, password, age, sex, timeinfo())
+    newUser = User_info(fname, lname, imagename, email, password, age, sex, timeinfo())
     db.session.add(newUser)
     db.session.commit()
-    nu = User_info.query.filter_by(username=username).first()
-    return redirect('/profile/'+str(nu.id)) 
+    flash('User successfully registered')
+    return redirect(url_for('signin'))
   return render_template('form.html', form=form)
+  
+  
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+  form = SigninForm()
+  if g.user.is_authenticated:
+    return redirect(url_for('profile'))
+   
+  if request.method == 'POST':
+    if form.validate() == False:
+      return render_template('signin.html', form=form)
+    else:
+      email = form.email.data.lower()
+      user = User_info.query.filter_by(email=email).first()
+      if user is None:
+        flash('Username or password invalid')
+        return redirect(url_for('signin'))
+      session['email'] = form.email.data
+      login_user(user)
+      return redirect(request.args.get('next') or url_for('profile'))
+                 
+  elif request.method == 'GET':
+    return render_template('signin.html', form=form)
+    
+    
+@app.route('/signout', methods=['POST'])
+def signout():
+    logout_user()
+    session['email'] = None
+    return redirect(url_for('home')) 
   
   
 @app.route('/profiles/', methods=["GET", "POST"])
@@ -85,19 +114,20 @@ def profiles():
   else:
     return render_template('profiles.html', users=users)
     
-@app.route('/profile/<userid>', methods=['POST', 'GET'])
-def user_profile(userid):
-  usr = User_info.query.filter_by(id=userid).first()
-  if usr is not None:
-    imgURL = url_for('static', filename='img/'+usr.image)
-    if request.method == 'POST':
-      return jsonify(userid=usr.userid, uname=usr.username, image=imgURL, sex=usr.sex, age=usr.age, profile_added_on=usr.datejoined)
-    else:
-      user = {'id':usr.id, 'userid':usr.userid, 'uname':usr.username, 'image':imgURL, 'age':usr.age, 'email':usr.email, 'sex':usr.sex}
-      return render_template('user.html', user=user, datestr=date_to_str(usr.datejoined))
-  else:
-    return render_template('404.html')
+
+@app.route('/profile', methods=['POST', 'GET'])
+@login_required
+def profile():
+  userg = g.user
+  image = url_for('static', filename='img/'+g.user.image)
+  user = {'id':userg.id, 'image':image, 'age':userg.age, 'fname':userg.fname, 'lname':userg.lname, 'email':userg.email, 'sex':userg.sex}
+  return render_template('user.html', user=user, datestr=date_to_str(userg.datejoined))
   
+    
+@app.before_request
+def before_request():
+    g.user = current_user
+    
 def date_to_str(dt):
   return dt.strftime("%a, %d %b, %Y")
 
@@ -120,7 +150,7 @@ def add_header(response):
     and also to cache the rendered page for 10 minutes.
     """
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-    response.headers['Cache-Control'] = 'public, max-age=600'
+    response.headers['Cache-Control'] = 'public, max-age=0'
     return response
 
 

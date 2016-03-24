@@ -8,18 +8,24 @@
 {% block main %}
 <div class="prof">
   <h1>Register Here</h1>
-  <p>Enter details below:</p>
+  <p>Enter details below: <span class="flash">*All Fields Mandatory*</span></p>
   <hr />
   <table>
   <form action="{{ url_for('register') }}" method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    <tr><td>Username:</td> <td>{{ form.username }}</td>
+    <tr><td>First Name:</td> <td>{{ form.fname(placeholder="Enter First Name") }}</td>
     <td><div class="flash">
-        {% for message in form.username.errors %}
+        {% for message in form.fname.errors %}
         {{ message }}
         {% endfor %}
     </div></td></tr>
-    <tr><td>Email:</td><td> {{ form.email }}</td>
+    <tr><td>Last Name:</td> <td>{{ form.lname(placeholder="Enter Last Name") }}</td>
+    <td><div class="flash">
+        {% for message in form.lname.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td>Email:</td><td> {{ form.email(placeholder="Enter Email") }}</td>
     <td>{% for message in form.email.errors %}
         <div class="flash">{{ message }}</div>
         {% endfor %}
@@ -30,7 +36,7 @@
         {{ message }}
         {% endfor %}
     </div></td></tr>
-    <tr><td>Password: </td><td>{{ form.password }}</td>
+    <tr><td>Password: </td><td>{{ form.password(placeholder="Enter Password") }}</td>
     <td><div class="flash">
         {% for message in form.password.errors %}
         {{ message }}
@@ -42,7 +48,7 @@
         {{ message }}
         {% endfor %}
     </div></td></tr>
-    <tr><td>Age:</td><td> {{ form.age }}</td>
+    <tr><td>Age:</td><td> {{ form.age(placeholder="Ages 10 to 85") }}</td>
     <td><div class="flash">
         {% for message in form.age.errors %}
         {{ message }}

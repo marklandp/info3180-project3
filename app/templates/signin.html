@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block js %}
+{% endblock %}
+
+
+{% block main %}
+<div class="prof">
+  <h1>Sign In Below</h1></h1>
+  <p>Enter details below: <span class="flash">*All Fields Mandatory*</span></p>
+  <hr />
+  <table>
+  <form action="{{ url_for('signin') }}" method="post">
+    {{ form.hidden_tag() }}
+    <tr><td>Email:</td> <td>{{ form.email(placeholder="Enter Email") }}</td>
+    <td><div class="flash">
+        {% for message in form.email.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    
+    <tr><td>Password: </td><td>{{ form.password(placeholder="Enter Password") }}</td>
+    <td><div class="flash">
+        {% for message in form.password.errors %}
+        {{ message }}
+        {% endfor %}
+    </div></td></tr>
+    <tr><td colspan="3">{{form.submit}}</td></tr>
+  </form>
+  </table>
+</div>
+{% endblock %}
