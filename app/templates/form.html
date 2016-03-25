@@ -9,6 +9,16 @@
 <div class="prof">
   <h1>Register Here</h1>
   <p>Enter details below: <span class="flash">*All Fields Mandatory*</span></p>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info alert-dismissable">
+            
+            [{message}}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
   <hr />
   <table>
   <form action="{{ url_for('register') }}" method="post" enctype="multipart/form-data">

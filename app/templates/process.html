@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block js %}
+{% endblock %}
+
+
+{% block main %}
+  <div class="body">
+  <div id="images-cont" class="cont">
+  <div class="head">
+    <img src="/static/img/{{ g.user['image'] }}" height="200" width="200">
+    <div class="profile_name">
+      <h1>{{g.user['fname']}}  {{g.user['lname']}}</h1>
+    </div>
+  </div>
+  <div id="images" class="p_content content">
+    <div>
+      <h1>Select your preferred Thumbnail from the list</h1>
+      <table>
+      <tr><td><strong>Title:</strong></td><td> {{title}}</td></tr>
+      <tr><td><strong>Description:</strong></td><td> {{description}}</td></tr>
+      <form action="{{ url_for('commit') }}" method=post>
+        <input type="hidden" name="title" value="{{title}}">
+        <input type="hidden" name="description" value="{{description}}">
+        {% for image in images %}
+        <tr><td><input type="radio" name="thumbnail" value="{{image}}"></td><td> <img src="{{image}}" height="150" width="200"></td></tr>
+        {% endfor %}
+        <tr><td colspan="2"><input type="submit" value="Confirm"/></td></tr>
+      </form>
+      </table>
+    </div>
+    <div>&nbsp;</div>
+  </div>
+  <div>&nbsp;</div>
+  </div>
+  </div>
+{% endblock %}

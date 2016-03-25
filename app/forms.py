@@ -32,7 +32,7 @@ class RegistrationForm(Form):
   
 
 class SigninForm(Form):
-  email = TextField("Email",  validators=[Required("Please enter your email address."), Email("Please enter your email address.")])
+  email = TextField("Email",  validators=[Required("Please enter your email address."), Email("Incorrect E-Mail format.")])
   password = PasswordField('Password', validators=[Required("Please enter a password.")])
   submit = SubmitField("Sign In")
    
@@ -46,8 +46,18 @@ class SigninForm(Form):
     user = User_info.query.filter_by(email = self.email.data.lower()).first()
     if user and user.check_password(self.password.data):
       return True
-    else:
-      self.email.errors.append("Invalid e-mail or password")
+    elif not user:
+      self.email.errors.append("Invalid E-Mail")
       return False
-    login_user(user)
+    else:
+      self.password.errors.append("Invalid Password")
+      return False
+      
+class WishForm(Form):
+  url = TextField('URL',  validators=[Required("Please enter web address.")])
+  
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+     
+      
   

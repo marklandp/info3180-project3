@@ -43,3 +43,20 @@ class User_info(db.Model):
 
   def __repr__(self):
     return '<User %r>' % self.username
+    
+class Wishes(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(150))
+  description = db.Column(db.String(200))
+  url = db.Column(db.String(200))
+  user = db.Column(db.String(50), db.ForeignKey("user_info.email"))
+  
+  def __init__(self, title, description, url, user): 
+    self.title = title
+    self.description = description
+    self.url = url
+    self.user = user
+    
+  def __repr__(self):
+    return '<Wish %r>' % self.title
+  

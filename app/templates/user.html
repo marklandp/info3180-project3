@@ -11,7 +11,7 @@
   <div class="head">
     <img src="{{ user['image'] }}" height="200" width="200">
     <div class="profile_name">
-      <h1>{{user['fname']}}  {{user['lname']}}</h1>
+      <h1>{{user['fname']}}  {{user['lname']}} <span><a id="exit" class="button" href="{{ url_for('signout') }}">Sign Out</a></span></h1>
     </div>
   </div>
   <div class="p_datebox content">
@@ -23,10 +23,30 @@
       Sex: {{user['sex']}}<br />
       Age: {{user['age']}}<br />
     </p>
-    <form action="{{ url_for('signout') }}" method="post">
-    <input type=submit value="Sign Out">
-    </form>
     </div>
+    <div class="p_content wishlist">
+    <h1>{{user['fname']}}'s Wishlist</h1>
+    <table>
+    <form action="{{ url_for('addWish') }}" method="post">
+      {{ form.hidden_tag() }}
+        <tr><td>Web Address:</td> <td>{{ form.url(placeholder="Enter Web Address Here") }}</td>
+        <td><div class="flash">
+        {% for message in form.url.errors %}
+        {{ message }}
+        {% endfor %}
+        </div></td></tr>
+        <tr><td colspan="3"><input type="submit" value="Add Wish"/></td></tr>
+      </form>
+      </table>
+      <div id="wishes">
+        <table>
+        {% for wish in wishes %}
+          <tr><td><img src="wish['url']" height="100" width="100"></td><td><p><strong>Title:</strong>{{wish['title']}}</p><p><strong>Description:</strong>{{wish['description']}}</p></td></tr>
+        {% endfor %}
+        </table>
+      </div>
+    </div>
+    <div>&nbsp;</div>
     </div>
   </div>
 {% endblock %}
