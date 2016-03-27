@@ -9,11 +9,16 @@
 <div class="prof">
   <h1>Sign In Below</h1></h1>
   <p>Enter details below:</p>
+    {% with messages = get_flashed_messages() %}
     {% if messages %}
+      {% for message in messages %}
         <div class="alert alert-info alert-dismissable">
-          {{messages}}
+            
+            {{message}}
         </div>
+      {% endfor %}
     {% endif %}
+  {% endwith %}
   <hr />
   <table>
   <form action="{{ url_for('signin') }}" method="post">

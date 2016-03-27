@@ -26,7 +26,6 @@
     </div>
     <div class="p_content wishlist">
     <h1>{{user['fname']}}'s Wishlist</h1>
-    <table>
     <form action="{{ url_for('addWish') }}" method="post">
       {{ form.hidden_tag() }}
         <tr><td>Web Address:</td> <td>{{ form.url(placeholder="Enter Web Address Here") }}</td>
@@ -37,13 +36,23 @@
         </div></td></tr>
         <tr><td colspan="3"><input type="submit" value="Add Wish"/></td></tr>
       </form>
+      <hr style="width:95%"/>
       </table>
       <div id="wishes">
         <table>
         {% for wish in wishes %}
-          <tr><td><img src="wish['url']" height="100" width="100"></td><td><p><strong>Title:</strong>{{wish['title']}}</p><p><strong>Description:</strong>{{wish['description']}}</p></td></tr>
+          <tr><td>{{wish['id']}}</td><td><a href="{{wish['origin']}}" target="_blank"><img src="{{wish['url']}}" height="100" width="100"></a></td><td><p><strong>Title:</strong>{{wish['title']}}</p><p><strong>Description:</strong>{{wish['description']}}</p></td></tr>
         {% endfor %}
-        </table>
+      </table>
+      <hr style="width:95%"/>
+      <!--{% for wish in wishes %}-->
+      <!--<div class="wish first">{{wish['id']}}</div>-->
+      <!--<div class="wish sec"><img src="{{wish['url']}}" height="100" width="100"></div>-->
+      <!--<div class="wish thd">-->
+      <!--  <p><strong>Title:</strong>{{wish['title']}}</p>-->
+      <!--  <p><strong>Description:</strong>{{wish['description']}}</p>-->
+      <!--</div>-->
+      <!--{% endfor %}-->
       </div>
     </div>
     <div>&nbsp;</div>

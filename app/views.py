@@ -71,7 +71,7 @@ def register():
     newUser = User_info(fname, lname, imagename, email, password, age, sex, timeinfo())
     db.session.add(newUser)
     db.session.commit()
-    flash('User successfully registered')
+    flash('You have successfully registered. Login below.')
     return redirect(url_for('signin'))
   return render_template('form.html', form=form)
   
@@ -169,7 +169,12 @@ def addWish():
     if thumbnail_spec and thumbnail_spec['href']:
       images.append(thumbnail_spec['href'])
       #print thumbnail_spec['href']
-    return render_template('process.html', description=description, title=content, images=images)
+    if len(images) >= 1:
+      return render_template('process.html', description=description, title=content, images=images, origin=url)
+    else:
+      desc="Unable to scrape any images from given url"
+      title="Error"
+      return render_template('process.html', description=desc, title=title, images=images)
   image = url_for('static', filename='img/'+g.user.image)
   user = {'id':g.user.id, 'image':image, 'age':g.user.age, 'fname':g.user.fname, 'lname':g.user.lname, 'email':g.user.email, 'sex':g.user.sex}
   return render_template('user.html', user=user, datestr=date_to_str(g.user.datejoined), form=form)
@@ -177,11 +182,13 @@ def addWish():
 @app.route('/commit', methods=['POST'])
 @login_required
 def commit():
-  if form.validate_on_submit():
+  if request.method == "POST":
     title = request.form['title']
     desc = request.form['description']
     thumb = request.form['thumbnail']
-    wish = wishes(title,desc,thumb)
+    origin = request.form['origin']
+    user = g.user.email
+    wish = Wishes(title,desc,thumb,user,origin)
     db.session.add(wish)
     db.session.commit()
     return redirect(url_for('profile'))

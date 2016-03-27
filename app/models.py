@@ -50,12 +50,14 @@ class Wishes(db.Model):
   description = db.Column(db.String(200))
   url = db.Column(db.String(200))
   user = db.Column(db.String(50), db.ForeignKey("user_info.email"))
+  origin = db.Column(db.String(200))
   
-  def __init__(self, title, description, url, user): 
+  def __init__(self, title, description, url, user, origin): 
     self.title = title
     self.description = description
     self.url = url
     self.user = user
+    self.origin = origin
     
   def __repr__(self):
     return '<Wish %r>' % self.title

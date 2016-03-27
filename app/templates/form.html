@@ -14,7 +14,7 @@
       {% for message in messages %}
         <div class="alert alert-info alert-dismissable">
             
-            [{message}}
+            {{message}}
         </div>
       {% endfor %}
     {% endif %}
@@ -76,7 +76,7 @@
         {{ message }}
         {% endfor %}
     </div></td></tr>
-    <tr><td colspan="3"><input type="submit" value="Register"/></td></tr>
+    <tr><td colspan="2"><input type="submit" value="Register"/></td><!--<td><a href="{{url_for('signin')}}">Sign In</a></td>--></tr>
   </form>
   </table>
 </div>
