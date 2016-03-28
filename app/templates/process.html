@@ -24,7 +24,7 @@
       <tr><td><strong>Edit Title:</strong></td><td><input type="text" name="title" value="{{title}}"></td></tr>
       <tr><td><strong>Description:</strong></td><td> {{description}}</td></tr>
       <tr><td><strong>Edit Description:</strong></td><td><textarea name="description" rows="5" cols="80" maxlength="199">{{description[0:199]}}</textarea></td></tr>
-      {% for image in images %}
+      {% for image in images[0:10] %}
         <tr><td><input type="radio" name="thumbnail" value="{{image}}"></td><td> <img src="{{image}}" height="150" width="200"></td></tr>
       {% endfor %}
       <tr><td colspan="2"><input type="submit" value="Confirm"/></td></tr>

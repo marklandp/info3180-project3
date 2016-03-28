@@ -6,7 +6,7 @@ class User_info(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   fname = db.Column(db.String(80))
   lname = db.Column(db.String(80))
-  image = db.Column(db.String(200))
+  image = db.Column(db.String(255))
   email = db.Column(db.String(50), unique=True)
   password = db.Column(db.String(100))
   age = db.Column(db.Integer)
@@ -50,7 +50,7 @@ class Wishes(db.Model):
   description = db.Column(db.String(200))
   url = db.Column(db.String(200))
   user = db.Column(db.String(50), db.ForeignKey("user_info.email"))
-  origin = db.Column(db.String(200))
+  origin = db.Column(db.String(255))
   
   def __init__(self, title, description, url, user, origin): 
     self.title = title

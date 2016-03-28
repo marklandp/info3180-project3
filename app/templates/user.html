@@ -39,12 +39,12 @@
       <hr style="width:95%"/>
       </table>
       <div id="wishes">
-        <table>
-        {% for wish in wishes %}
-          <tr><td>{{wish['id']}}</td><td><a href="{{wish['origin']}}" target="_blank"><img src="{{wish['url']}}" height="100" width="100"></a></td><td><p><strong>Title:</strong>{{wish['title']}}</p><p><strong>Description:</strong>{{wish['description']}}</p></td></tr>
-        {% endfor %}
+        <table style="width:95%">
+          {% for wish in wishes %}
+            <tr><td><a href="{{wish['origin']}}" target="_blank"><img src="{{wish['url']}}" height="100" width="100"></a></td><td><p><strong>Title:</strong>{{wish['title']}}</p><p><strong>Description:</strong>{{wish['description']}}</p></td></tr>
+            <tr><td colspan="3"><hr /></td></tr>
+          {% endfor %}
       </table>
-      <hr style="width:95%"/>
       <!--{% for wish in wishes %}-->
       <!--<div class="wish first">{{wish['id']}}</div>-->
       <!--<div class="wish sec"><img src="{{wish['url']}}" height="100" width="100"></div>-->

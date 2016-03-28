@@ -11,11 +11,11 @@
   <hr>
   <table>
     <tr>
-      <th>User ID</th><th>Username</th>
+      <th>Name</th><th>Email</th>
     </tr>
     {% for user in users %}
     <tr>
-      <td>{{ user.userid }}</td><td><a href="/profile/{{ user.id }}">{{ user.username}}</a></td>
+      <td>{{ user.fname }} {{user.lname}}</td><td>{{ user.email}}</td>
     </tr>
   {% endfor %}
   </table>

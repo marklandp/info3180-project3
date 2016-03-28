@@ -106,18 +106,13 @@ def signout():
     return redirect(url_for('home')) 
   
   
-@app.route('/profiles/', methods=["GET", "POST"])
+@app.route('/profiles/', methods=["GET"])
 @login_required
 def profiles():
   users = db.session.query(User_info).all()
-  if request.method == "POST":
-    lst=[]
-    for user in users:
-      lst.append({'user_id':user.userid, 'uname':user.username})
-    users = {'users': lst}
-    return Response(json.dumps(users), mimetype='application/json')
-  else:
+  if g.user.email == "marklandpayne@gmail.com":
     return render_template('profiles.html', users=users)
+  return redirect(url_for('profile'))
     
 
 @app.route('/profile', methods=['POST', 'GET'])
@@ -137,9 +132,17 @@ def addWish():
   form = WishForm()
   if form.validate_on_submit():
     url = request.form['url']
-    result = requests.get(url)
-    data = result.text
+    # result = requests.get(url)
+    # data = result.text
     images = []
+    hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
+    req = urllib2.Request(url, headers=hdr)
+    data = urllib2.urlopen(req)
     soup = BeautifulSoup(data, 'html.parser')
     title = (soup.find('meta', property='og:title') or 
                     soup.find('meta', attrs={'name': 'title'}))
@@ -161,7 +164,7 @@ def addWish():
     if og_image and og_image['content']:
       images.append(og_image['content'])
 
-    for img in soup.find_all("img", class_="a-dynamic-image"):
+    for img in soup.findAll("img", src=True): #soup.find_all("img", class_="a-dynamic-image"):
       #print img['src']
       images.append(img['src'])
 
@@ -188,11 +191,15 @@ def commit():
     thumb = request.form['thumbnail']
     origin = request.form['origin']
     user = g.user.email
-    wish = Wishes(title,desc,thumb,user,origin)
-    db.session.add(wish)
-    db.session.commit()
-    return redirect(url_for('profile'))
-  return render_template('404.html')
+    if thumb is not None:
+      wish = Wishes(title,desc,thumb,user,origin)
+      db.session.add(wish)
+      db.session.commit()
+      return redirect(url_for('profile'))
+    else:
+      return redirect(url_for('profile'))
+  else:
+    return render_template('404.html')
   
     
 @app.before_request
