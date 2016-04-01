@@ -12,13 +12,12 @@
 ::-moz-selection{ .custom-highlight; }
 ::selection { .custom-highlight; }
 
-body {
-    width: 800px;
-}
 
 
 body {
     width:100%;
+    background: url('http://i.imgur.com/Eor57Ae.jpg') no-repeat fixed center center;
+    background-size: cover;
 }
 
 
@@ -28,15 +27,10 @@ body {
   height:100px
 }
 
-
-// #exit {
-//   text-decoration: none;
-//   float: right;
-//   margin-right: 5px;
-//   font-size: 18px;
-//   color: lime;
-//   margin-top: 20px;
-// }
+#main {
+  width:1000px;
+  margin: 5px auto; 
+}
 
 #url {
   width: 200px;
@@ -47,29 +41,24 @@ body {
   margin-top: 128px;
   overflow: auto;
   padding-bottom:20px;
-}
-
-#images-cont {
-  width: 83%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #exit:hover {
   text-decoration: none;
   color: lime;
-  //margin-right: 5px;
-  //font-size: 18px;
-  //margin-top: 20px;
 }
 
 #exit {
     color: white;
-    border-radius: 5px;
+    border-radius: 15px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    background: rgb(202, 60, 60);
+    background: #E74430;
     float: right;
     margin-right: 5px;
-    font-size: 18px;
-    margin-top: 5px;
+    font-size: 12px;
+    margin-top: 15px;
     padding: 5px 12px;
     display: inline-block;
     zoom: 1;
@@ -87,10 +76,18 @@ body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     }
+    
+#imgBtn {
+  height:24px;
+  width:124px;
+  border-radius:12px;
+  overflow:hidden;
+}
+
 
 .cont {
   margin: 5px auto;
-  width: 800px;
+  width: 1000px;
   background-color:lightCyan;
   height: auto;
 }
@@ -98,7 +95,7 @@ body {
 .content {
   clear: left;
   width: 320px;
-  margin: auto;
+  margin-left: 234px;
   padding-left: 20px;
   background-color: lightSkyBlue;
 }
@@ -127,7 +124,7 @@ img {
   position: relative;
   left: 20px;
   top: 20px;
-  width: 500px;
+  width: 69%;
   background-color: lightSkyBlue;
   border: 1px solid black;
 }
@@ -138,18 +135,16 @@ td {
 }
 
 .profile_name h1{
-  padding-left: 30px;
+  padding-left: 20px;
 }
 
 .p_datebox {
-  margin-top: 20px;
   border: 1px solid black;
-//   background-color:lightCyan;
 }
 
 .p_content {
   border: 1px solid black;
-//   background-color:lightCyan;
+  margin-top: 17px;
 }
 
 .prof {
@@ -159,18 +154,9 @@ td {
   padding: 15px; 
 }
 
-#add {
-  color: magenta;
-}
-
-#add:hover {
-  color: lime;
-  text-decoration: none;
-}
-
 .wishlist {
   clear: both;
-  width: 95%;
+  width: 96%;
   margin: auto;
   padding-left: 20px;
   background-color: lightSkyBlue;
@@ -204,4 +190,11 @@ td {
 
 .thd {
   width: 78%;
+}
+
+address {
+  width:1000px;
+  margin:auto;
+  font-style:italic;
+  color:#fff;
 }

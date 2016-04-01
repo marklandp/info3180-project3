@@ -40,8 +40,9 @@ def load_user(id):
 @app.route('/')
 def home():
     """Render website's home page."""
+    if g.user.is_authenticated:
+      return redirect(url_for('profile'))
     return render_template('home.html')
-
 
 @app.route('/about/')
 def about():
@@ -91,7 +92,6 @@ def signin():
       user = User_info.query.filter_by(email=email).first()
       if user is None and form.validate() == False:
         return redirect(url_for('signin'))
-      session['email'] = form.email.data
       login_user(user)
       return redirect(request.args.get('next') or url_for('profile'))
                  
@@ -102,7 +102,6 @@ def signin():
 @app.route('/signout')
 def signout():
     logout_user()
-    session['email'] = None
     return redirect(url_for('home')) 
   
   
@@ -164,14 +163,13 @@ def addWish():
     if og_image and og_image['content']:
       images.append(og_image['content'])
 
-    for img in soup.findAll("img", src=True): #soup.find_all("img", class_="a-dynamic-image"):
-      #print img['src']
-      images.append(img['src'])
+    for img in soup.findAll("img", src=True):
+      if "sprite" not in img["src"] and "data:image/jpeg" not in img["src"]:
+        images.append(img['src'])
 
     thumbnail_spec = soup.find('link', rel='image_src')
     if thumbnail_spec and thumbnail_spec['href']:
       images.append(thumbnail_spec['href'])
-      #print thumbnail_spec['href']
     if len(images) >= 1:
       return render_template('process.html', description=description, title=content, images=images, origin=url)
     else:

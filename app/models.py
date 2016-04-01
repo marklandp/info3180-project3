@@ -48,7 +48,7 @@ class Wishes(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(150))
   description = db.Column(db.String(200))
-  url = db.Column(db.String(200))
+  url = db.Column(db.String(255))
   user = db.Column(db.String(50), db.ForeignKey("user_info.email"))
   origin = db.Column(db.String(255))
   
