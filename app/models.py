@@ -7,7 +7,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSign
 class User_info(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(150))
-  email = db.Column(db.String(50), unique=True)
+  email = db.Column(db.String(80), unique=True)
   password_hash = db.Column(db.String(255))
   
   def __init__(self, name, email, password): 
@@ -39,3 +39,21 @@ class User_info(db.Model):
 
   def __repr__(self):
     return '<User %r>' % self.id
+    
+class Wishes(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(180))
+  description = db.Column(db.String(255))
+  thumbnail = db.Column(db.String(255))
+  user = db.Column(db.Integer, db.ForeignKey("user_info.id"))
+  url = db.Column(db.String(255))
+  
+  def __init__(self, title, description, thumbnail, user, url): 
+    self.title = title
+    self.description = description
+    self.thumbnail = thumbnail
+    self.user = user
+    self.url = url
+    
+  def __repr__(self):
+    return '<Wish %r>' % self.title
