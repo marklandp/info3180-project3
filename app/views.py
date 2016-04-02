@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import urlparse
 import urllib2
 from app import app, db
-from app.models import User_info
+from app.models import User_info, Wishes
 from flask_httpauth import HTTPBasicAuth
 
 auth = HTTPBasicAuth()
@@ -73,8 +73,7 @@ def login():
       return jsonify({'error':'null', 'data':{'token': token.decode('ascii'), 'expires': 1200, 'user':{'_id': g.user.id, 'email': g.user.email, 'name': g.user.name}, 'message':'success'}})
     return jsonify({'error': '1', 'data':{}, 'message':'Bad user name or password'})
     
-@app.route('/api/user/<int:id>/wishlist ', methods=['POST','GET'])
-@auth.login_required
+@app.route('/api/user/<id>/wishlist', methods=['GET', 'POST'])
 def wish(id):
   if request.method == "POST":
     title = request.form['title']

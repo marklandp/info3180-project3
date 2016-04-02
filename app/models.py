@@ -43,7 +43,7 @@ class User_info(db.Model):
 class Wishes(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(180))
-  description = db.Column(db.String(255))
+  description = db.Column(db.Text)
   thumbnail = db.Column(db.String(255))
   user = db.Column(db.Integer, db.ForeignKey("user_info.id"))
   url = db.Column(db.String(255))
