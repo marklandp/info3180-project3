@@ -1,6 +1,7 @@
 #!flask/bin/python
 import six
-from flask import Flask, jsonify, abort, request, make_response, url_for, g
+from flask import Flask, jsonify, abort, request, Response, url_for, g, session
+import json
 import requests
 import time
 from bs4 import BeautifulSoup
@@ -75,6 +76,7 @@ def login():
     
 @app.route('/api/user/<id>/wishlist', methods=['GET', 'POST'])
 def wish(id):
+  print id
   if request.method == "POST":
     title = request.form['title']
     desc = request.form['description']
@@ -82,19 +84,31 @@ def wish(id):
     url = request.form['url']
     user = User_info.query.filter_by(id=id).first()
     if user:
-      wish = Wishes(title,desc,thumb,id,url)
-      db.session.add(wish)
-      db.session.commit()
-      time.sleep(2)
       wishes = Wishes.query.filter_by(user=id).all()
-      return jsonify({'error':'null', 'data':{'wishes': wishes}, 'message':'success'})
+      for wish in wishes:
+        if url in wish.url:
+          return jsonify({'error':'2', 'data':'', 'message':'url item already exists'})
+        wish = Wishes(title,desc,thumb,id,url)
+        db.session.add(wish)
+        db.session.commit()
+        time.sleep(2)
+        allwishes = Wishes.query.filter_by(user=id).all()
+        lst=[]
+        for wish in allwishes:
+          lst.append({'title':wish.title, 'description':wish.description, 'url':wish.url, 'thumbnail':wish.thumbnail})
+        data = ({'error':'null', 'data':{'wishes': lst}, 'message':'success'})
+        return jsonify(**data)
     return jsonify({'error':'1', 'data':'', 'message':'no such wishlist exists'})
   user = User_info.query.filter_by(id=id).first()
   if user:
     wishes = Wishes.query.filter_by(user=id).all()
-    return jsonify({'error':'null', 'data':{'wishes': wishes}, 'message':'success'})
+    lst=[]
+    for wish in wishes:
+      lst.append({'title':wish.title, 'description':wish.description, 'url':wish.url, 'thumbnail':wish.thumbnail})
+    data = ({'error':'null', 'data':{'wishes': lst}, 'message':'success'})
+    return jsonify(**data)
   return jsonify({'error':'1', 'data':'', 'message':'no such wishlist exists'})  
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True) 
