@@ -13,6 +13,10 @@ from flask_httpauth import HTTPBasicAuth
 
 auth = HTTPBasicAuth()
 
+@app.route('/')
+def home():
+  return jsonify({'message':'Welcome to the wishlist system. This system has no gui you can use this site by sending curl requests to routes defined in this doc ==> https://docs.google.com/document/d/1edz3AW5Eq3ZZ2qgoZpo_9j0zNNb3SkPs5k4EO7RJ_kU/edit#heading=h.6ofmligdv9pv. Part 3 of the document. 620011825'})
+
 @app.route('/api/thumbnail/process', methods=['POST'])
 def process():
   images = []
@@ -38,7 +42,7 @@ def process():
     print thumbnail_spec['href']
         
   for img in soup.find_all("img", class_="a-dynamic-image"):
-    if "sprite" not in img["src"]:
+    if "sprite" not in img["src"] and "data:image/jpeg" not in img["src"]:
       images.append(img['src'])
       print img['src']
   
@@ -60,14 +64,13 @@ def register():
         added = User_info.query.filter_by(email = email).first()
         token = added.generate_auth_token(1200) 
         return jsonify({'error':'null', 'data':{'token': token.decode('ascii'), 'expires': 1200, 'user':{'_id': added.id, 'email': added.email, 'name': added.name}, 'message':'success'}})
-      return jsonify({'error': '1', 'data':User_info.query.filter_by(email = email).first(), 'message':'user already exists'})
+      return jsonify({'error': '1', 'data':'', 'message':'user already exists'})
       
 @app.route('/api/user/login', methods=['POST'])
 def login():
-    # first try to authenticate by token
-    email = request.form['email']
+    email_or_token = request.form['email']
     password = request.form['password']
-    user = User_info.query.filter_by(email=email).first()
+    user = User_info.query.filter_by(email=email_or_token).first()
     if user and user.verify_password(password):
       g.user = user
       token = g.user.generate_auth_token(1200) 
