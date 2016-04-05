@@ -78,9 +78,7 @@ def login():
     return jsonify({'error': '1', 'data':{}, 'message':'Bad user name or password'})
     
 @app.route('/api/user/<id>/wishlist', methods=['GET', 'POST'])
-@auth.login_required
 def wish(id):
-  print id
   if request.method == "POST":
     title = request.form['title']
     desc = request.form['description']
@@ -103,16 +101,17 @@ def wish(id):
         data = ({'error':'null', 'data':{'wishes': lst}, 'message':'success'})
         return jsonify(**data)
     return jsonify({'error':'1', 'data':'', 'message':'no such wishlist exists'})
-  user = User_info.query.filter_by(id=id).first()
-  if user:
-    wishes = Wishes.query.filter_by(user=id).all()
-    lst=[]
-    for wish in wishes:
-      lst.append({'title':wish.title, 'description':wish.description, 'url':wish.url, 'thumbnail':wish.thumbnail})
-    data = ({'error':'null', 'data':{'wishes': lst}, 'message':'success'})
-    return jsonify(**data)
-  return jsonify({'error':'1', 'data':'', 'message':'no such wishlist exists'})  
-
+	if g.user.id == id
+		user = User_info.query.filter_by(id=id).first()
+		if user:
+			wishes = Wishes.query.filter_by(user=id).all()
+			lst=[]
+			for wish in wishes:
+				lst.append({'title':wish.title, 'description':wish.description, 'url':wish.url, 'thumbnail':wish.thumbnail})
+			data = ({'error':'null', 'data':{'wishes': lst}, 'message':'success'})
+			return jsonify(**data)
+		return jsonify({'error':'1', 'data':'', 'message':'no such wishlist exists'})  
+	return jsonify({'error':'3', 'data':'', 'message':'unauthorized access'})
 
 if __name__ == '__main__':
     app.run(debug=True) 
